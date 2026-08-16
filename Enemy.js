@@ -5,13 +5,15 @@ export class Enemy {
   y;
   speed = 1;
   ctx;
-  damaged = false;
+  health;
+  isDead = false;
   targetedByOrangeTurret = false;
 
   constructor(ctx) {
     this.ctx = ctx;
     this.x = Math.random() * (600 - this.size);
     this.y = 0;
+    this.health = 100;
     this.draw();
   }
 
@@ -32,7 +34,10 @@ export class Enemy {
     }
   }
 
-  damage() {
-    this.damaged = true;
+  damage(damagePoints) {
+    this.health -= damagePoints;
+    if (this.health <= 0) {
+      this.isDead = true;
+    }
   }
 }

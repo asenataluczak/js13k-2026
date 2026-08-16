@@ -15,7 +15,7 @@ let redBullets = [];
 let enemies = [];
 document.addEventListener("click", (e) => {
   const dx = e.clientX - canvas.width / 2;
-  const dy = e.clientY - (canvas.height - 50);
+  const dy = e.clientY - (canvas.height - 10);
 
   const newBullet = new Bullet({
     ctx,
@@ -39,7 +39,7 @@ function updatePhysics() {
   enemies.forEach((e) => {
     e.update();
   });
-  enemies = enemies.filter((e) => !e.damaged);
+  enemies = enemies.filter((e) => !e.isDead);
 
   turret.targetEnemy(enemies);
   turret.update();

@@ -7,7 +7,7 @@ export class Turret {
   y = 600 / 2 - 100;
   speed = 6;
   ctx;
-  radius = 100;
+  radius = 150;
 
   enemy;
   bullet;
@@ -19,13 +19,42 @@ export class Turret {
 
   update(enemyX, enemyY) {
     if (!this.enemy) return;
+
+    if (!this.bullet) {
+      this.bullet = new Bullet({
+        ctx: this.ctx,
+        angle: Math.atan2(
+          this.enemy.y +
+            this.enemy.size / 2 -
+            2.5 -
+            (this.y + this.size / 2 - 2.5),
+          this.enemy.x +
+            this.enemy.size / 2 -
+            2.5 -
+            (this.x + this.size / 2 - 2.5),
+        ),
+        x: this.x + this.size / 2 - 2.5,
+        y: this.y + this.size / 2 - 2.5,
+        size: 5,
+        color: this.color,
+        speed: 3,
+        damage: 50,
+      });
+      return;
+    }
     this.bullet?.update(
       Math.atan2(
-        this.enemy.y - this.y + this.size / 2,
-        this.enemy.x - this.x + this.size / 2,
+        this.enemy.y +
+          this.enemy.size / 2 -
+          2.5 -
+          (this.y + this.size / 2 - 2.5),
+        this.enemy.x +
+          this.enemy.size / 2 -
+          2.5 -
+          (this.x + this.size / 2 - 2.5),
       ),
     );
-    if (this.bullet?.x < this.enemy.x + this.enemy.size / 2 + 30) {
+    if (this.bullet?.checkCollision([this.enemy])) {
       this.bullet = null;
     }
   }
@@ -62,22 +91,6 @@ export class Turret {
 
     // aim line
     if (!this.enemy) return;
-
-    if (!this.bullet) {
-      this.bullet = new Bullet({
-        ctx: this.ctx,
-        angle: Math.atan2(
-          this.enemy.y - this.y + this.size / 2,
-          this.enemy.x - this.x + this.size / 2,
-        ),
-        x: this.x + this.size / 2,
-        y: this.y + this.size / 2,
-        size: 5,
-        color: this.color,
-        speed: 3,
-      });
-    }
-
     this.ctx.strokeStyle = this.color;
     this.ctx.beginPath();
     this.ctx.setLineDash([5, 5]);
@@ -89,6 +102,6 @@ export class Turret {
     this.ctx.stroke();
     this.ctx.setLineDash([]);
 
-    this.bullet.draw();
+    this.bullet?.draw();
   }
 }

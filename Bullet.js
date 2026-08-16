@@ -6,6 +6,7 @@ export class Bullet {
   speed;
   angle;
   ctx;
+  damage;
 
   constructor({
     ctx,
@@ -15,6 +16,7 @@ export class Bullet {
     size = 10,
     color = "#f00",
     speed = 6,
+    damage = 100,
   }) {
     this.ctx = ctx;
     this.angle = angle;
@@ -23,10 +25,12 @@ export class Bullet {
     this.size = size;
     this.color = color;
     this.speed = speed;
+    this.damage = damage;
     this.draw();
   }
 
-  update() {
+  update(angle = this.angle) {
+    this.angle = angle;
     this.x += this.speed * Math.cos(this.angle);
     this.y += this.speed * Math.sin(this.angle);
   }
@@ -59,7 +63,7 @@ export class Bullet {
         bulletBottom > enemyTop &&
         bulletTop < enemyBottom
       ) {
-        collider.damage();
+        collider.damage(this.damage);
         return true;
       }
     }
