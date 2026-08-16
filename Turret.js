@@ -2,7 +2,7 @@ import { Bullet } from "./Bullet.js";
 
 export class Turret {
   size = 40;
-  color = "#FF7F00";
+  color = "#ff7f00";
   x = 600 / 2 - this.size / 2;
   y = 600 / 2 - 100;
   speed = 6;
@@ -37,8 +37,8 @@ export class Turret {
         y: this.y + this.size / 2 - 2.5,
         size: 5,
         color: this.color,
-        speed: 3,
-        damage: 50,
+        speed: 8,
+        damage: 40,
       });
       return;
     }
@@ -63,7 +63,10 @@ export class Turret {
     this.enemy = enemies.find((enemy) => {
       const distance = Math.hypot(enemy.x - this.x, enemy.y - this.y);
       enemy.targetedByOrangeTurret = false;
-      return distance <= this.radius;
+      return (
+        distance <= this.radius &&
+        (!enemy.isDamagedByColor || enemy.isDamagedByColor === this.color)
+      );
     });
     if (this.enemy) {
       this.enemy.targetedByOrangeTurret = true;

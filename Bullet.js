@@ -16,7 +16,7 @@ export class Bullet {
     size = 10,
     color = "#f00",
     speed = 6,
-    damage = 100,
+    damage = 60,
   }) {
     this.ctx = ctx;
     this.angle = angle;
@@ -63,7 +63,7 @@ export class Bullet {
         bulletBottom > enemyTop &&
         bulletTop < enemyBottom
       ) {
-        collider.damage(this.damage);
+        collider.damage(this.damage, this.color);
         return true;
       }
     }

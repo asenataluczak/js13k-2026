@@ -11,6 +11,36 @@ document.addEventListener("mousemove", (e) => {
   mousePosition.y = e.clientY;
 });
 
+let selectedManualColor = "#f00";
+document.addEventListener("keyup", (e) => {
+  console.log(e.key);
+  switch (e.key) {
+    case "1":
+      selectedManualColor = "#f00";
+      break;
+    case "2":
+      selectedManualColor = "#ff7f00";
+      break;
+    case "3":
+      selectedManualColor = "yellow";
+      break;
+    case "4":
+      selectedManualColor = "green";
+      break;
+    case "5":
+      selectedManualColor = "#0000FF";
+      break;
+    case "6":
+      selectedManualColor = "#4B0082";
+      break;
+    case "7":
+      selectedManualColor = "#9400D3";
+      break;
+    default:
+      selectedManualColor = "#f00";
+  }
+});
+
 let redBullets = [];
 let enemies = [];
 document.addEventListener("click", (e) => {
@@ -20,6 +50,7 @@ document.addEventListener("click", (e) => {
   const newBullet = new Bullet({
     ctx,
     angle: Math.atan2(dy, dx),
+    color: selectedManualColor,
   });
   redBullets.push(newBullet);
 
@@ -62,11 +93,11 @@ function draw() {
   turret.draw();
 
   // player sprite
-  ctx.fillStyle = "#f00";
+  ctx.fillStyle = selectedManualColor;
   ctx.fillRect(canvas.width / 2 - 20, canvas.height - 10, 40, 10);
 
   // aim line
-  ctx.strokeStyle = "#f00";
+  ctx.strokeStyle = selectedManualColor;
   ctx.beginPath();
   ctx.moveTo(canvas.width / 2, canvas.height - 10);
   ctx.lineTo(mousePosition.x, mousePosition.y);

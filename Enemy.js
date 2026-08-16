@@ -5,15 +5,18 @@ export class Enemy {
   y;
   speed = 1;
   ctx;
-  health;
+  maxHealth;
+  currentHealth;
   isDead = false;
+  isDamagedByColor;
   targetedByOrangeTurret = false;
 
   constructor(ctx) {
     this.ctx = ctx;
     this.x = Math.random() * (600 - this.size);
     this.y = 0;
-    this.health = 100;
+    this.maxHealth = 100;
+    this.currentHealth = this.maxHealth;
     this.draw();
   }
 
@@ -25,8 +28,25 @@ export class Enemy {
     this.ctx.fillStyle = this.color;
     this.ctx.fillRect(this.x, this.y, this.size, this.size);
 
+    if (this.isDamagedByColor) {
+      this.ctx.strokeStyle = this.isDamagedByColor;
+      this.ctx.lineWidth = 2;
+      this.ctx.strokeRect(this.x, this.y, this.size, this.size);
+      this.ctx.fillStyle = this.isDamagedByColor;
+
+      const damageSize = Math.round(
+        ((this.maxHealth - this.currentHealth) / this.maxHealth) * this.size,
+      );
+      this.ctx.fillRect(
+        this.x,
+        this.y + (this.size - damageSize),
+        this.size,
+        damageSize > this.size ? this.size : damageSize,
+      );
+    }
+
     if (this.targetedByOrangeTurret) {
-      this.ctx.strokeStyle = "#FF7F00";
+      this.ctx.strokeStyle = "hsl(30, 100%, 50%)";
       this.ctx.setLineDash([8, 3]);
       this.ctx.lineWidth = 2;
       this.ctx.strokeRect(this.x, this.y, this.size, this.size);
@@ -34,9 +54,14 @@ export class Enemy {
     }
   }
 
-  damage(damagePoints) {
-    this.health -= damagePoints;
-    if (this.health <= 0) {
+  damage(damagePoints, color) {
+    if (this.currentHealth === 100) {
+      this.isDamagedByColor = color;
+    }
+    if (this.isDamagedByColor && this.isDamagedByColor !== color) return;
+
+    this.currentHealth -= damagePoints;
+    if (this.currentHealth <= 0) {
       this.isDead = true;
     }
   }
