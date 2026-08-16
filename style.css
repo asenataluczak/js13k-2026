@@ -5,6 +5,7 @@ body {
 }
 canvas {
   border: 4px solid white;
+  cursor: none;
 }
 
 .box {

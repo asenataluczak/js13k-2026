@@ -4,8 +4,6 @@ import { Turret } from "./Turret.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
-const WIDTH = 600;
-const HEIGHT = 600;
 
 const mousePosition = { x: 0, y: 0 };
 document.addEventListener("mousemove", (e) => {
@@ -16,8 +14,8 @@ document.addEventListener("mousemove", (e) => {
 let redBullets = [];
 let enemies = [];
 document.addEventListener("click", (e) => {
-  const dx = e.clientX - WIDTH / 2;
-  const dy = e.clientY - (HEIGHT - 50);
+  const dx = e.clientX - canvas.width / 2;
+  const dy = e.clientY - (canvas.height - 50);
 
   const newBullet = new Bullet({
     ctx,
@@ -48,18 +46,7 @@ function updatePhysics() {
 }
 
 function draw() {
-  ctx.clearRect(0, 0, WIDTH, HEIGHT);
-
-  // player sprite
-  ctx.fillStyle = "#f00";
-  ctx.fillRect(WIDTH / 2 - 20, HEIGHT - 10, 40, 10);
-
-  // aim line
-  ctx.strokeStyle = "#f00";
-  ctx.beginPath();
-  ctx.moveTo(WIDTH / 2, HEIGHT - 10);
-  ctx.lineTo(mousePosition.x, mousePosition.y);
-  ctx.stroke();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // red bullets
   redBullets.forEach((b) => {
@@ -73,6 +60,33 @@ function draw() {
 
   // turret
   turret.draw();
+
+  // player sprite
+  ctx.fillStyle = "#f00";
+  ctx.fillRect(canvas.width / 2 - 20, canvas.height - 10, 40, 10);
+
+  // aim line
+  ctx.strokeStyle = "#f00";
+  ctx.beginPath();
+  ctx.moveTo(canvas.width / 2, canvas.height - 10);
+  ctx.lineTo(mousePosition.x, mousePosition.y);
+  ctx.stroke();
+  ctx.lineWidth = 2;
+  const gap = 3;
+  const size = 4;
+  ctx.moveTo(mousePosition.x - gap, mousePosition.y - gap - size);
+  ctx.lineTo(mousePosition.x - gap, mousePosition.y - gap);
+  ctx.lineTo(mousePosition.x - gap - size, mousePosition.y - gap);
+  ctx.moveTo(mousePosition.x + gap, mousePosition.y - gap - size);
+  ctx.lineTo(mousePosition.x + gap, mousePosition.y - gap);
+  ctx.lineTo(mousePosition.x + gap + size, mousePosition.y - gap);
+  ctx.moveTo(mousePosition.x + gap + size, mousePosition.y + gap);
+  ctx.lineTo(mousePosition.x + gap, mousePosition.y + gap);
+  ctx.lineTo(mousePosition.x + gap, mousePosition.y + gap + size);
+  ctx.moveTo(mousePosition.x - gap - size, mousePosition.y + gap);
+  ctx.lineTo(mousePosition.x - gap, mousePosition.y + gap);
+  ctx.lineTo(mousePosition.x - gap, mousePosition.y + gap + size);
+  ctx.stroke();
 }
 
 const MAX_FPS = 60;
