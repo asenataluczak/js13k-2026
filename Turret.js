@@ -2,7 +2,7 @@ import { Bullet } from "./Bullet.js";
 
 export class Turret {
   size = 40;
-  color = "#ff7f00";
+  color = '#f00'; //"#ff7f00";
   x = 600 / 2 - this.size / 2;
   y = 600 / 2 - 100;
   speed = 6;

@@ -20,7 +20,8 @@ export class Enemy {
 
     const chanceOfPrefill = Math.round(Math.random() * 10);
     if (chanceOfPrefill === 1) {
-      const colors = ["#f00", "#ff7f00", "yellow", "green", "#0000FF", "#4B0082", "#9400D3"];
+      // const colors = ["#f00", "#ff7f00", "yellow", "green", "#0000FF", "#4B0082", "#9400D3"];
+      const colors = ['#f00']
       this.isDamagedByColor = colors[Math.floor(Math.random() * colors.length)];
       this.currentHealth = this.maxHealth - Math.round(Math.random() * (this.maxHealth - 70) + 10);
     }
