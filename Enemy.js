@@ -17,6 +17,16 @@ export class Enemy {
     this.y = 0;
     this.maxHealth = 100;
     this.currentHealth = this.maxHealth;
+
+    const chanceOfPrefill = Math.round(Math.random() * 10);
+    if (chanceOfPrefill === 1) {
+      const colors = ["#f00", "#ff7f00", "yellow", "green", "#0000FF", "#4B0082", "#9400D3"];
+      this.isDamagedByColor = colors[Math.floor(Math.random() * colors.length)];
+      this.currentHealth = this.maxHealth - Math.round(Math.random() * (this.maxHealth - 70) + 10);
+    }
+    const randomSpeed = Math.round(Math.random() * 2);
+    this.speed = randomSpeed || this.speed;
+
     this.draw();
   }
 
