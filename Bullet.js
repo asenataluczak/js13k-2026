@@ -30,6 +30,10 @@ export class Bullet {
   }
 
   update(angle = this.angle) {
+    if (!angle) {
+      this.y -= this.speed;
+      return;
+    }
     this.angle = angle;
     this.x += this.speed * Math.cos(this.angle);
     this.y += this.speed * Math.sin(this.angle);

@@ -1,6 +1,7 @@
 import { Bullet } from "./Bullet.js";
 import { Enemy } from "./Enemy.js";
 import { Turret } from "./Turret.js";
+import { Player } from "./Player.js";
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -14,15 +15,14 @@ document.addEventListener("mousemove", (e) => {
 let manualShootingInProgress = false;
 document.addEventListener("mousedown", (e) => {
   manualShootingInProgress = true;
-})
+});
 
 document.addEventListener("mouseup", (e) => {
   manualShootingInProgress = false;
-})
+});
 
 let selectedManualColor = "#f00";
 document.addEventListener("keyup", (e) => {
-  console.log(e.key);
   switch (e.key) {
     case "1":
       selectedManualColor = "#f00";
@@ -53,21 +53,30 @@ document.addEventListener("keyup", (e) => {
 let redBullets = [];
 let enemies = [];
 document.addEventListener("click", (e) => {
-  const dx = e.clientX - canvas.width / 2;
+  const dx = e.clientX - player.x;
   const dy = e.clientY - (canvas.height - 10);
 
   const newBullet = new Bullet({
     ctx,
-    angle: Math.atan2(dy, dx),
     color: selectedManualColor,
+    x: player.x + 15,
+    y: player.y,
   });
   redBullets.push(newBullet);
 
+  if (enemies.length > 20) return;
   const newEnemy = new Enemy(ctx);
   enemies.push(newEnemy);
 });
 
 const turret = new Turret(ctx);
+
+const player = new Player(
+  ctx,
+  mousePosition.x,
+  canvas.height - 10,
+  selectedManualColor,
+);
 
 function updatePhysics() {
   redBullets.forEach((b) => {
@@ -83,6 +92,8 @@ function updatePhysics() {
 
   turret.targetEnemy(enemies);
   turret.update();
+
+  player.update(mousePosition.x);
 }
 
 function draw() {
@@ -102,39 +113,7 @@ function draw() {
   turret.draw();
 
   // player sprite
-  ctx.fillStyle = selectedManualColor;
-  ctx.fillRect(canvas.width / 2 - 20, canvas.height - 10, 40, 10);
-
-  // aim line
-  ctx.strokeStyle = selectedManualColor;
-  ctx.beginPath();
-  ctx.moveTo(canvas.width / 2, canvas.height - 10);
-  ctx.lineTo(mousePosition.x, mousePosition.y);
-  ctx.save();
-  if (manualShootingInProgress) {
-    ctx.shadowColor = selectedManualColor;
-    ctx.shadowBlur = 20;
-  } else {
-    ctx.shadowBlur = 0;
-  }
-  ctx.stroke();
-  ctx.lineWidth = 2;
-  const gap = 3;
-  const size = 4;
-  ctx.moveTo(mousePosition.x - gap, mousePosition.y - gap - size);
-  ctx.lineTo(mousePosition.x - gap, mousePosition.y - gap);
-  ctx.lineTo(mousePosition.x - gap - size, mousePosition.y - gap);
-  ctx.moveTo(mousePosition.x + gap, mousePosition.y - gap - size);
-  ctx.lineTo(mousePosition.x + gap, mousePosition.y - gap);
-  ctx.lineTo(mousePosition.x + gap + size, mousePosition.y - gap);
-  ctx.moveTo(mousePosition.x + gap + size, mousePosition.y + gap);
-  ctx.lineTo(mousePosition.x + gap, mousePosition.y + gap);
-  ctx.lineTo(mousePosition.x + gap, mousePosition.y + gap + size);
-  ctx.moveTo(mousePosition.x - gap - size, mousePosition.y + gap);
-  ctx.lineTo(mousePosition.x - gap, mousePosition.y + gap);
-  ctx.lineTo(mousePosition.x - gap, mousePosition.y + gap + size);
-  ctx.stroke();
-  ctx.restore();
+  player.draw(selectedManualColor, manualShootingInProgress, mousePosition);
 }
 
 const MAX_FPS = 60;
