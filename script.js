@@ -11,6 +11,15 @@ document.addEventListener("mousemove", (e) => {
   mousePosition.y = e.clientY;
 });
 
+let manualShootingInProgress = false;
+document.addEventListener("mousedown", (e) => {
+  manualShootingInProgress = true;
+})
+
+document.addEventListener("mouseup", (e) => {
+  manualShootingInProgress = false;
+})
+
 let selectedManualColor = "#f00";
 document.addEventListener("keyup", (e) => {
   console.log(e.key);
@@ -101,6 +110,13 @@ function draw() {
   ctx.beginPath();
   ctx.moveTo(canvas.width / 2, canvas.height - 10);
   ctx.lineTo(mousePosition.x, mousePosition.y);
+  ctx.save();
+  if (manualShootingInProgress) {
+    ctx.shadowColor = selectedManualColor;
+    ctx.shadowBlur = 20;
+  } else {
+    ctx.shadowBlur = 0;
+  }
   ctx.stroke();
   ctx.lineWidth = 2;
   const gap = 3;
@@ -118,6 +134,7 @@ function draw() {
   ctx.lineTo(mousePosition.x - gap, mousePosition.y + gap);
   ctx.lineTo(mousePosition.x - gap, mousePosition.y + gap + size);
   ctx.stroke();
+  ctx.restore();
 }
 
 const MAX_FPS = 60;
