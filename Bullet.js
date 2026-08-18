@@ -15,7 +15,7 @@ export class Bullet {
     y = 600 - 10,
     size = 10,
     color = "#f00",
-    speed = 6,
+    speed = 10,
     damage = 60,
   }) {
     this.ctx = ctx;
@@ -46,11 +46,13 @@ export class Bullet {
     this.ctx.fillRect(this.x, this.y, this.size, this.size);
   }
 
-  checkCollision(colliders) {
-    const outOfBounds =
-      this.x < 0 || this.x > 600 || this.y < 0 || this.y > 600;
-    if (outOfBounds) return true;
+  checkOutOfBounds() {
+    return this.y < 0;
+  }
 
+  checkCollision(colliders) {
+    if (this.y < 0) return true;
+    
     for (const collider of colliders) {
       const bulletRight = this.x + this.size;
       const bulletTop = this.y;

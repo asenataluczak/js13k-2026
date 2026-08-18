@@ -11,22 +11,23 @@ export class Enemy {
   isDamagedByColor;
   targetedByOrangeTurret = false;
 
-  constructor(ctx) {
+  constructor({
+    ctx,
+    maxHealth = 100,
+    size = 30,
+    x = Math.random() * (600 - this.size),
+    speed = Math.ceil(Math.random() * 2),
+  }) {
     this.ctx = ctx;
-    this.x = Math.random() * (600 - this.size);
+    this.x = x;
     this.y = 0;
-    this.maxHealth = 100;
+    this.size = size;
+    this.maxHealth = maxHealth;
     this.currentHealth = this.maxHealth;
 
-    const chanceOfPrefill = Math.round(Math.random() * 10);
-    if (chanceOfPrefill === 1) {
-      // const colors = ["#f00", "#ff7f00", "yellow", "green", "#0000FF", "#4B0082", "#9400D3"];
-      const colors = ['#f00']
-      this.isDamagedByColor = colors[Math.floor(Math.random() * colors.length)];
-      this.currentHealth = this.maxHealth - Math.round(Math.random() * (this.maxHealth - 70) + 10);
-    }
-    const randomSpeed = Math.round(Math.random() * 2);
-    this.speed = randomSpeed || this.speed;
+    this.speed = speed;
+
+    console.log(this.x, this.size, this.maxHealth, this.speed);
 
     this.draw();
   }
@@ -69,7 +70,6 @@ export class Enemy {
     if (this.currentHealth === 100) {
       this.isDamagedByColor = color;
     }
-    if (this.isDamagedByColor && this.isDamagedByColor !== color) return;
 
     this.currentHealth -= damagePoints;
     if (this.currentHealth <= 0) {
